@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переміщення div елементів</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap; /* Дозволяємо елементам переходити на новий рядок */
+            align-content: flex-start; /* Позиціюємо їх зверху вниз, без вертикального скролу */ 
+            justify-content: center;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            color: #000;
+            text-align: center;
+            line-height: 100px; 
+            font-size: 23px; 
+            background-color:rgba(59,130,246,.5);
+            cursor: pointer;
+            margin: 5px; /* Додавання маржі між елементами */
+            position: relative; /* Додаємо стиль position: relative; */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const numBoxes = 100;
+        const boxes = [];
+
+        // Функція для створення div елементів та додавання їх до body
+        function createBoxes() {
+            for (let i = 1; i <= numBoxes; i++) {
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.textContent = 'div ' + i;
+                document.body.appendChild(box);
+                boxes.push(box);
+
+                // Додаємо обробник подій для кліку на div елементі
+                let isClicked = false;
+                box.addEventListener('click', () => {
+                    if (!isClicked) {
+                        toggleBoxPosition(box);
+                    } else {
+                        toggleBoxPositionBack(box);
+                    }
+                    isClicked = !isClicked;
+                });
+            }
+        }
+
+        // Функція для переміщення div елементу на передній план body
+        function toggleBoxPosition(box) {
+            // Переміщуємо на передній план
+            document.body.insertBefore(box, document.body.firstChild);
+        }
+
+        // Функція для повернення div елементу на попередню позицію
+        function toggleBoxPositionBack(box) {
+            const previousIndex = boxes.indexOf(box);
+            const previousBox = boxes[previousIndex - 1];
+            if (previousBox) {
+                // Вставляємо після попереднього елемента
+                previousBox.after(box);
+            } else {
+                // Якщо немає попереднього елемента, вставляємо на початок body
+                document.body.insertBefore(box, document.body.firstChild);
+            }
+        }
+
+        // Викликаємо функцію для створення div елементів
+        createBoxes();
+    </script>
+</body>
+</html>
